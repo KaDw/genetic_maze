@@ -37,16 +37,14 @@ int maze[MAZE_X][MAZE_Y] = {	{'#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
 
 
 void print_maze_path(){
-	//point_t path_map[30] = {};
+	//int cnt = 0;
 	char temp[MAZE_X][MAZE_Y] = {}; 
 	memcpy(temp, maze, MAZE_X*MAZE_Y); 
 	for(int i = 0; i < MOVE_LIMIT; i++){
 		if(array[scores[0].index][i]){
 			func_ptr[array[scores[0].index][i]](); // best score path
-			//printf("[%d,%d]\r\n", player.x, player.y);
 			maze[player.x][player.y] = '*';//(char)(i+97);
-			// path_map[i].x = player.x;
-			// path_map[i].y = player.y;
+			//cnt++;
 		}
 	}
 
@@ -65,6 +63,7 @@ void print_maze_path(){
 	player_reset();
 	memcpy(maze, temp, MAZE_X*MAZE_Y);
 	printf("\r\n");
+	//printf("Goal reached in %d moves\r\n", cnt);
 }
 
 void print_maze(){
@@ -176,6 +175,7 @@ void cross() {
 		memcpy(array[i], best_spec[firstParent], crossOver);
 		memcpy(array[i], best_spec[secondParent], (MOVE_LIMIT - crossOver));
 	}
+
 }
 
 int fitness(int chromo){
