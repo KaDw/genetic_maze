@@ -3,12 +3,12 @@
 #define MAZE_Y 10
 
 /* parameters to experiment with */
-#define POPULATION_SIZE 500
-#define BEST_CNT 7
-#define REPRODUCTIVE 150
+#define POPULATION_SIZE 1000
+#define BEST_CNT 20
+#define REPRODUCTIVE 500
 #define PENALTY_VAL 2
 #define MUTATION_CHANCE 0.5f
-#define FINAL_SCORE 3
+#define FINAL_SCORE 10
 
 
 typedef struct{

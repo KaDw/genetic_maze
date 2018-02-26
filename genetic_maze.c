@@ -21,7 +21,7 @@ int penalty;
 
 scores_t scores[POPULATION_SIZE];
 
-void (*func_ptr[5])() = {player_stay, player_move_up, player_move_down, player_move_left, player_move_right};
+void (*func_ptr[])() = {player_move_up, player_move_down, player_move_left, player_move_right};
 
 
 int maze[MAZE_X][MAZE_Y] = {	{'#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
@@ -130,7 +130,7 @@ void player_move_right(){
 void fill(){
 	for(int x = 0; x < POPULATION_SIZE; x++){
 		for(int y = 0; y < MOVE_LIMIT; y++){
-			array[x][y] = rand() % 5;
+			array[x][y] = rand() % 4;
 		}
 	}
 }
@@ -183,7 +183,7 @@ int fitness(int chromo){
 		func_ptr[array[chromo][i]]();
 	}
 
-	int score = abs(finish_pos.x - player.x) + abs(finish_pos.y - player.y) + penalty;
+	int score = 2*(abs(finish_pos.x - player.x) + abs(finish_pos.y - player.y)) + penalty;
 
 	player_reset();
 	return score;
@@ -209,7 +209,7 @@ void move_player(){
 void mutate(){
 	for(int i = 0; i < POPULATION_SIZE-1; i++){
 		if(MUTATION_CHANCE > (double)rand() / (double)RAND_MAX){ // random number (0,1)
-			array[i][rand() % 30] = rand() % 5; // chhose random element and mutate
+			array[i][rand() % 30] = rand() % 4; // chhose random element and mutate
 		}
 	}
 }
@@ -227,15 +227,21 @@ int main(){
 	printf("Start maze: \r\n");
 	print_maze();
 
-	for(int i = 0; i < 50000; i++){
+	//FILE *avg_error_file = fopen("avg_error.txt", "wb");
+	FILE *scores_file = fopen("scores.txt", "w");
+
+	char write_buf[10];
+	for(int i = 0; i < 300; i++){
 		mutate();
 		cross();
 		score();
+		int buf_count = sprintf(write_buf, "%d ", scores[0].score);
+		fwrite(write_buf, sizeof(char), buf_count, scores_file); // convert to ascii
 		if(scores[0].score < FINAL_SCORE){
+
 			print_maze_path();
 			printf("Path found in %d generation\n", i);
 			printf("Score: %d\n", scores[0].score);
-
 			break;
 		}
 		if(i % 100 == 0){
@@ -245,4 +251,5 @@ int main(){
 			//player_reset();
 		}
 	}
+	fclose(scores_file);
 }

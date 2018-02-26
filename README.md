@@ -25,3 +25,5 @@ Population array will look like this:
   |           |               This part will be replace by new specimens created by corssing best specimens
   |            Specimens good enough to leave them as they are
    Best specimens used for crossing, we also dont modify them ```
+
+   
