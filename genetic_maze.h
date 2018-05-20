@@ -11,7 +11,6 @@
 #define MUTATION_CHANCE 0.5f
 #define FINAL_SCORE 6
 
-
 typedef struct{
 	int x;
 	int y;
@@ -22,22 +21,7 @@ typedef struct{
 	int index;
 }scores_t;
 
-
-
-// void print_maze();
-// void print_maze_path();
-
-// void player_reset();
-// int player_stay(point_t* player);
 int player_move_up(point_t* player);
 int player_move_down(point_t* player);
 int player_move_left(point_t* player);
 int player_move_right(point_t* player);
-// void fill(int array[][MOVE_LIMIT]);
-// int* sort(int* array, size_t size);
-// void sort_scores_t(scores_t scores[]);
-// void cross();
-// int fitness(int chromo);
-// int score();
-// void move_player();
-// void mutate();
