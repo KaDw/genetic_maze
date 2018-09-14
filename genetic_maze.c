@@ -157,40 +157,23 @@ void mutate(){
 	}
 }
 
-int main(int argc, char *argv[]){
+void search_path(size_t iter, point_t *player, point_t *finish_pos){
+	// memset for bigger arrays
 	int best_spec[BEST_CNT][MOVE_LIMIT] = {0};
 	scores_t scores[POPULATION_SIZE] = {0};
-	point_t player =  {.x = 1, .y = 1};
-	point_t finish_pos = {.x = 8, .y = 8};
-	char* ptr = NULL;
-	long iter = 0; 
-	time_t t;
 
-	iter = strtol(argv[1], &ptr, 10);
-	if(argc > 2 || iter < 1){
-		printf("Usage: genetic_maze [iterations]\n");
-		printf("eg genetic_maze 500\n");
-		exit(0);	
-	}
-
-	srand((unsigned) time(&t));
-
-	fill(population);
-	printf("Start maze: \r\nP - player, F - finish\r\n");
-	print_maze(&player, &finish_pos);
-	// log best score in every iteration
 	FILE *scores_file = fopen("scores.txt", "w");
 
 	char write_buf[10];
 	// main loop
-	for(long i = 0; i < iter; i++){
+	for(size_t i = 0; i < iter; i++){
 		mutate();
 		cross(best_spec, scores);
-		score(scores, &player, &finish_pos);
+		score(scores, player, finish_pos);
 		int buf_count = sprintf(write_buf, "%d ", scores[0].score);
-		fwrite(write_buf, sizeof(char), buf_count, scores_file); // convert to ascii
+		fwrite(write_buf, sizeof(char), buf_count, scores_file); // log best score in every iteration
 		if(scores[0].score < FINAL_SCORE){
-			print_maze_path(scores, &finish_pos);
+			print_maze_path(scores, finish_pos);
 			printf("Path found in %d generations\n", i);
 			printf("Score: %d\n", scores[0].score);
 			break;
@@ -200,4 +183,26 @@ int main(int argc, char *argv[]){
 		}
 	}
 	fclose(scores_file);
+}
+
+int main(int argc, char *argv[]){
+	point_t player =  {.x = 1, .y = 1};
+	point_t finish_pos = {.x = 8, .y = 8};
+	char* ptr = NULL;
+	size_t iter = 0; 
+
+	iter = strtol(argv[1], &ptr, 10);
+	if(argc > 2 || iter < 1){
+		printf("Usage: genetic_maze [iterations]\n");
+		printf("eg genetic_maze 5000\n");
+		exit(0);	
+	}
+
+	fill(population);
+	printf("Start maze: \r\nP - player, F - finish\r\n");
+	print_maze(&player, &finish_pos);
+
+	search_path(iter, &player, &finish_pos);
+
+	return 0;
 }
